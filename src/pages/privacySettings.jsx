@@ -14,7 +14,7 @@ const PrivacySettings = () => {
     <div
       className="flex flex-col items-center opacity-50justify-center min-h-screen bg-cover bg-center p-4"
       style={{
-        backgroundImage: "url('src/assets/images/5461759_2808328.jpg')",
+        backgroundImage: "url('./src/assets/images/5461759_2808328.jpg')",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
       }}
