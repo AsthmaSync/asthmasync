@@ -1,4 +1,3 @@
-// 
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -37,8 +36,8 @@ const Dashboard = () => {
           <Link to="/medicationTracking" className="block py-2 px-4 rounded-md bg-cyan-500 text-white text-center hover:bg-cyan-400">
             Medication Tracking
           </Link>
-          <Link to="/progressOverview" className="block py-2 px-4 rounded-md bg-cyan-500 text-white text-center hover:bg-cyan-400">
-            Progress Overview
+          <Link to="/triggers" className="block py-2 px-4 rounded-md bg-cyan-500 text-white text-center hover:bg-cyan-400">
+            Triggers
           </Link>
         </nav>
       </aside>

@@ -1,15 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import image1 from '../assets/images/16920050_5818665.jpg';
 
 const SignUp = () => {
   return (
     <div
-      className="flex items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat"
+      className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center p-4"
       style={{
-        backgroundImage: "url('src/assets/images/26232787_7202210.jpg')", 
+        backgroundImage: `url(${image1})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="bg-white  shadow-md rounded-lg w-full max-w-md p-6">
+      <div className="absolute inset-0 bg-black opacity-5"></div>
+
+      <div className="bg-white  shadow-md rounded-lg w-full max-w-md p-6 relative z-10">
         <h1 className="text-3xl font-bold text-center text-cyan-500 mb-4">Welcome to AsthmaSync</h1>
         <p className="text-center text-gray-700 mb-6">
           Sign up to track, manage, and control your asthma symptoms.

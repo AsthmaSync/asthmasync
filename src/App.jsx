@@ -10,10 +10,10 @@ import Questionnaire from './pages/questionnaire'
 import Dashboard from './assets/layout/DashBoard'
 import SymptomsLog from './assets/layout/symptomlog'
 import MedicationTracking from './assets/layout/medicationTracker'
-import ProgressBar from './components/progressBar'
 import AsthmaTips from './components/AsthmaTipsAndResources'
 import LoggingHistory from './assets/layout/LoggingHistory'
 import Reminders from './assets/layout/Reminders'
+import Triggers from './components/Triggers'
 
 
 function App() {
@@ -68,7 +68,10 @@ function App() {
       element: <LoggingHistory />
     },
     
-
+    {
+      path: "/triggers",
+      element: <Triggers />
+    },
 
   ])
 

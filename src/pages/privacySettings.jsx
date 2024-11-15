@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
+import image4 from '../assets/images/26232787_7202210.jpg';
 
 const PrivacySettings = () => {
   const [accepted, setAccepted] = useState(true);
@@ -12,14 +13,16 @@ const PrivacySettings = () => {
 
   return (
     <div
-      className="flex flex-col items-center opacity-50justify-center min-h-screen bg-cover bg-center p-4"
+      className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center p-4"
       style={{
-        backgroundImage: "url('./src/assets/images/5461759_2808328.jpg')",
+        backgroundImage: `url(${image4})`,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="bg-white  shadow-md rounded-lg w-full max-w-lg p-6 mt-20">
+      <div className="absolute inset-0 bg-black opacity-5"></div>
+      
+      <div className= "bg-white relative shadow-md rounded-lg w-full max-w-lg p-6 mt-20 opacity-100 z-10">
         <h1 className="text-2xl font-semibold mb-4 text-center text-cyan-500">
           Privacy Settings
         </h1>
@@ -75,3 +78,4 @@ const PrivacySettings = () => {
 };
 
 export default PrivacySettings;
+

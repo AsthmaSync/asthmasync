@@ -1,26 +1,32 @@
+import React from 'react';
 import { FaBook, FaInfoCircle } from 'react-icons/fa';
+import Image1 from '../assets/images/images (1).jpg';
+import Image2 from '../assets/images/3585204_66161.jpg'
+import Image3 from '../assets/images/11667706_20945553.jpg';
+import Image4 from '../assets/images/7321317_3629599.jpg';
+import Image5 from '../assets/images/138418890_41b1386c-7f44-4d8e-b5b2-068d81ad78ba.jpg';
 
 const AsthmaTipsAndResources = () => {
   const tips = [
     { 
       text: "Avoid triggers like smoke, pollen, and pet dander.", 
-      image: "src/assets/images/images (1).jpg" 
+      image: Image1 
     },
     { 
-      text: "Take medications as prescribed by your healthcare provider.", 
-      image: "src/assets/images/3585204_66161 (1).jpg" 
+      text: "Make sure to always take your medicatiop-n.", 
+      image: Image2
     },
     { 
       text: "Use a peak flow meter to monitor lung function regularly.", 
-      image: "src/assets/images/11667706_20945553.jpg" 
+      image: Image3 
     },
     { 
       text: "Develop an action plan with your healthcare provider.", 
-      image: "/src/assets/images/7321317_3629599.jpg" 
+      image: Image4 
     },
     { 
       text: "Keep your inhaler accessible at all times.", 
-      image: "src/assets/images/138418890_41b1386c-7f44-4d8e-b5b2-068d81ad78ba.jpg" 
+      image: Image5 
     },
   ];
 
@@ -40,12 +46,11 @@ const AsthmaTipsAndResources = () => {
       link: "https://www.lung.org", 
       icon: <FaBook /> 
     },
-    
   ];
 
   return (
-    <div className="p-6e  max-w-full mx-auto mt-10 mb-10">
-      <h2 className="text-3xl font-bold mb-16 text-cyan-500 text-center ">Asthma Management Tips</h2>
+    <div className="p-6 max-w-full mx-auto mt-10 mb-10">
+      <h2 className="text-3xl font-bold mb-16 text-cyan-500 text-center">Asthma Management Tips</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-16">
         {tips.map((tip, index) => (
           <div key={index} className="flex flex-col items-center">

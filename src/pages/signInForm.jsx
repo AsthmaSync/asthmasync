@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import image1 from '../assets/images/16920051_5811528.jpg';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -21,12 +22,13 @@ const SignIn = () => {
     <div
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center p-4"
       style={{
-        backgroundImage: "url('src/assets/images/16920051_5811528.jpg')", 
+        backgroundImage: `url(${image1})`,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="bg-white  shadow-md rounded-lg w-full max-w-md p-6">
+      <div className="absolute inset-0 bg-black opacity-5"></div>
+      <div className="bg-white  shadow-md rounded-lg w-full max-w-md p-6 relative z-10">
         <h1 className="text-2xl font-semibold mb-6 text-center text-cyan-500">Welcome to AsthmaSync</h1>
         <p className="text-gray-600 mb-8 text-center">Please sign in to continue</p>
 

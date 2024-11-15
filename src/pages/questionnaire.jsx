@@ -1,7 +1,6 @@
-
-// 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import image1 from '../assets/images/198566533_5603ab5d-dec1-48ed-945e-1533217c33bc.jpg';
 
 const Questionnaire = () => {
   const [formData, setFormData] = useState({
@@ -31,12 +30,13 @@ const Questionnaire = () => {
     <div
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center p-4"
       style={{
-        backgroundImage: "url('src/assets/images/3585204_66161.jpg')",
+        backgroundImage: `url(${image1})`,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="bg-white shadow-md rounded-lg w-full max-w-lg p-6 mb-10 mt-10">
+      <div className="absolute inset-0 bg-black opacity-5"></div>
+      <div className="bg-white shadow-md rounded-lg w-full max-w-lg p-6 mb-6 mt-10 relative z-10">
         <h1 className="text-2xl font-semibold mb-6 text-center text-cyan-500">Tell Us About Your Symptoms</h1>
         
         <form onSubmit={handleSubmit} className="space-y-4">
