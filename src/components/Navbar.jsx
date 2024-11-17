@@ -19,8 +19,8 @@ const Navbar = () => {
 
           {/* Menu for larger screens */}
           <div className="hidden md:flex space-x-8 items-center">
-            <Link to="/" className="text-white hover:text-cyan-700 font-bold">
-              Dashboard
+            <Link to="/Signin" className="text-white hover:text-cyan-700 font-bold">
+             Sign In
             </Link>
             <Link to="/tracker" className="text-white hover:text-cyan-700 font-bold">
               Tracker

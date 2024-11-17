@@ -1,20 +1,41 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import image1 from '../assets/images/16920051_5811528.jpg';
+import { Link, useNavigate } from 'react-router-dom';
+import image1 from '../assets/images/16920050_5818665.jpg';
+import { apiLogin } from '../services/auth';
+import { FiEye, FiEyeOff } from 'react-icons/fi'; // Import icons for password visibility toggle
 
 const SignIn = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
   const navigate = useNavigate();
 
-  const handleSignIn = (e) => {
-    e.preventDefault();
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
-   
-    if (email === 'test@example.com' && password === 'password') {
-      navigate('/questionnaire');
-    } else {
-      alert('Invalid credentials. Please try again.');
+  const handlePasswordToggle = () => {
+    setShowPassword(!showPassword); // Toggle the password visibility state
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    try {
+      const response = await apiLogin(formData);
+      const token = response.data.token;
+      localStorage.setItem('token', token); // Save token for authentication
+      navigate('/dashboard'); // Redirect to the dashboard
+    } catch (err) {
+      setError(err.response?.data?.message || 'Invalid credentials. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -23,40 +44,74 @@ const SignIn = () => {
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center p-4"
       style={{
         backgroundImage: `url(${image1})`,
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
       }}
     >
-      <div className="absolute inset-0 bg-black opacity-5"></div>
-      <div className="bg-white  shadow-md rounded-lg w-full max-w-md p-6 relative z-10">
-        <h1 className="text-2xl font-semibold mb-6 text-center text-cyan-500">Welcome to AsthmaSync</h1>
-        <p className="text-gray-600 mb-8 text-center">Please sign in to continue</p>
+      <div className="absolute inset-0 bg-black opacity-10"></div>
 
-        <form onSubmit={handleSignIn} className="space-y-4">
+      <div className="bg-white shadow-md rounded-lg w-full max-w-md p-6 relative z-10">
+        <h1 className="text-3xl font-bold text-center text-cyan-500 mb-4">Welcome Back</h1>
+        <p className="text-center text-gray-700 mb-6">
+          Sign in to manage your asthma symptoms effectively.
+        </p>
+
+        {error && (
+          <div className="text-red-500 text-center mb-4">
+            {error}
+          </div>
+        )}
+
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <input
             type="email"
+            name="email"
             placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formData.email}
+            onChange={handleChange}
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
             required
           />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            required
-          />
-
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              required
+            />
+            <div
+              onClick={handlePasswordToggle}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+            >
+              {showPassword ? <FiEyeOff size={15} /> : <FiEye size={15} />}
+            </div>
+          </div>
           <button
             type="submit"
-            className="w-full bg-cyan-500 text-white py-2 px-4 rounded-lg hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
+            className={`w-full text-white py-2 px-4 rounded-lg shadow-md transition-all duration-300 ${
+              loading ? 'bg-cyan-400 cursor-not-allowed' : 'bg-cyan-500 hover:bg-cyan-400'
+            }`}
+            disabled={loading}
           >
-            Sign In
+            {loading ? (
+              <span className="flex items-center justify-center">
+                <span className="loader mr-2"></span> Signing In...
+              </span>
+            ) : (
+              'Sign In'
+            )}
           </button>
         </form>
+
+        <p className="text-center text-gray-600 mt-4">
+          Don't have an account?{' '}
+          <Link to="/signup" className="text-cyan-500 hover:underline">
+            Sign Up
+          </Link>
+        </p>
       </div>
     </div>
   );

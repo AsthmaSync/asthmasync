@@ -6,17 +6,17 @@ const MedicationTracking = () => {
   const [name, setName] = useState('');
   const [dosage, setDosage] = useState('');
   const [frequency, setFrequency] = useState('');
-  const [purpose, setPurpose] = useState('');
-  const [taken, setTaken] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [purpose, setPurpose] = useState('');
+  const [taken, setTaken] = useState('');
   const [dosageTaken, setDosageTaken] = useState('');
   const [editMode, setEditMode] = useState(false);
   const [editingId, setEditingId] = useState(null);
 
   // Add or save edited medication
   const handleSave = () => {
-    if (!name || !dosage || !frequency || !purpose || !taken || !startDate || !endDate || !dosageTaken) {
+    if (!name || !dosage || !frequency || !startDate || !endDate || !purpose || !taken  || !dosageTaken) {
       alert("Please fill out all fields.");
       return;
     }
@@ -25,14 +25,14 @@ const MedicationTracking = () => {
       // Update the edited medication
       setMedications(medications.map((med) =>
         med.id === editingId
-          ? { id: med.id, name, dosage, frequency, purpose, taken, startDate, endDate, dosageTaken }
+          ? { id: med.id, name, dosage, frequency, startDate, endDate, purpose, taken,  dosageTaken }
           : med
       ));
       setEditMode(false);
       setEditingId(null);
     } else {
       // Add a new medication
-      const newMedication = { id: Date.now(), name, dosage, frequency, purpose, taken, startDate, endDate, dosageTaken };
+      const newMedication = { id: Date.now(), name, dosage, frequency,  startDate, endDate, purpose, taken,  dosageTaken };
       setMedications([...medications, newMedication]);
     }
 
@@ -40,10 +40,10 @@ const MedicationTracking = () => {
     setName('');
     setDosage('');
     setFrequency('');
-    setPurpose('');
-    setTaken('');
     setStartDate('');
     setEndDate('');
+    setPurpose('');
+    setTaken('');
     setDosageTaken('');
   };
 
@@ -162,10 +162,10 @@ const MedicationTracking = () => {
                   <p className="text-gray-700"><strong>Name:</strong> {med.name}</p>
                   <p className="text-gray-700"><strong>Dosage:</strong> {med.dosage}</p>
                   <p className="text-gray-700"><strong>Frequency:</strong> {med.frequency}</p>
-                  <p className="text-gray-700"><strong>Purpose:</strong> {med.purpose}</p>
-                  <p className="text-gray-700"><strong>Taken:</strong> {med.taken}</p>
                   <p className="text-gray-700"><strong>Start Date:</strong> {med.startDate}</p>
                   <p className="text-gray-700"><strong>End Date:</strong> {med.endDate}</p>
+                  <p className="text-gray-700"><strong>Purpose:</strong> {med.purpose}</p>
+                  <p className="text-gray-700"><strong>Taken:</strong> {med.taken}</p>
                   <p className="text-gray-700"><strong>Dosage Taken:</strong> {med.dosageTaken}</p>
                 </div>
                 <div className="flex space-x-2">

@@ -60,9 +60,7 @@ const SymptomsLog = () => {
   return (
     <div
       className="flex items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat"
-      style={{
-        backgroundImage: "url('src/assets/images/16920050_5818665.jpg')", // Replace with your image URL
-      }}
+
     >
       <div className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
         <h1 className="text-2xl font-semibold text-cyan-500 mb-4">Symptoms Log</h1>

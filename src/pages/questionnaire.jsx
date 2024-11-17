@@ -35,7 +35,7 @@ const Questionnaire = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="absolute inset-0 bg-black opacity-5"></div>
+      <div className="absolute inset-0 bg-black opacity-10"></div>
       <div className="bg-white shadow-md rounded-lg w-full max-w-lg p-6 mb-6 mt-10 relative z-10">
         <h1 className="text-2xl font-semibold mb-6 text-center text-cyan-500">Tell Us About Your Symptoms</h1>
         

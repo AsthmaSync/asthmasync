@@ -16,8 +16,11 @@ import Reminders from './assets/layout/Reminders'
 import Triggers from './components/Triggers'
 
 
+
 function App() {
   const router = createBrowserRouter([
+
+    
     {
       path: "/",
       element: <LandingPage />
@@ -72,6 +75,9 @@ function App() {
       path: "/triggers",
       element: <Triggers />
     },
+
+
+    
 
   ])
 

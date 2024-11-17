@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Image1 from '../assets/images/pexels-cottonbro-6202735.jpg';
-import Image2 from '../assets/images/pexels-pixabay-40568.jpg';
+import Image2 from '../assets/images/pexels-luci-23254259-6816451.jpg';
 import Image3 from '../assets/images/pexels-gustavo-fring-6285303.jpg';
 
 const images = [Image1, Image2, Image3]; 

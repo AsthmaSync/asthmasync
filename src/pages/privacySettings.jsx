@@ -20,7 +20,7 @@ const PrivacySettings = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="absolute inset-0 bg-black opacity-5"></div>
+      <div className="absolute inset-0 bg-black opacity-15"></div>
       
       <div className= "bg-white relative shadow-md rounded-lg w-full max-w-lg p-6 mt-20 opacity-100 z-10">
         <h1 className="text-2xl font-semibold mb-4 text-center text-cyan-500">
