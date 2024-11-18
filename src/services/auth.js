@@ -6,7 +6,6 @@ export const apiSignup = async (payload) => {
 export const apiLogin = async (payload) => {
     return await apiClient.post ('/users/signin', payload)
 }
-
 export const apiProfile = async (payload) => {
     return await apiClient.get ( '/users/me/dashboard', payload)
 }
