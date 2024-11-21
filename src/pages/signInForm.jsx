@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import image1 from '../assets/images/16920050_5818665.jpg';
 import { apiLogin } from '../services/auth';
 import { FiEye, FiEyeOff } from 'react-icons/fi'; // Import icons for password visibility toggle
+import axios from 'axios';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -29,11 +30,24 @@ const SignIn = () => {
     setError('');
     try {
       const response = await apiLogin(formData);
-      const token = response.data.token;
-      localStorage.setItem('token', token); // Save token for authentication
-      navigate('/dashboard'); // Redirect to the dashboard
-    } catch (err) {
-      setError(err.response?.data?.message || 'Invalid credentials. Please try again.');
+      console.log('Login response:', response); // For debugging
+
+      if (response.data && response.data.accessToken) {
+        // Store the token
+        localStorage.setItem('token', response.data.accessToken);
+        console.log('Token stored:', localStorage.getItem('token')); // Verify token storage
+
+        // Update axios headers with the new token
+        axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.accessToken}`;
+
+        // Redirect to dashboard
+        navigate('/dashboard');
+      } else {
+        setError('Login failed: No token received');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError(error.response?.data?.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }

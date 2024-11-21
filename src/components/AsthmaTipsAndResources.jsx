@@ -49,7 +49,7 @@ const AsthmaTipsAndResources = () => {
   ];
 
   return (
-    <div className="p-6 max-w-full mx-auto mt-10 mb-10">
+    <div className="p-6 max-w-full mx-auto mt-5 mb-10">
       <h2 className="text-3xl font-bold mb-16 text-cyan-500 text-center">Asthma Management Tips</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-16">
         {tips.map((tip, index) => (

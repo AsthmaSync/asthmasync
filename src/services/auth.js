@@ -10,6 +10,9 @@ export const apiProfile = async (payload) => {
     return await apiClient.get ( '/users/me/dashboard', payload)
 }
 export const apiUser = async (payload) => {
-    return await apiClient.fetch( '/users/me', payload)
+    return await apiClient.get('/users/me', payload)
 }
 
+export const apiGetData = async () => {
+    return await apiClient.get('/users/me/dashboard');
+}
