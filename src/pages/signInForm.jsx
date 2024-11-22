@@ -34,13 +34,12 @@ const SignIn = () => {
       console.log('Login response:', response); 
 
       if (response.data && response.data.accessToken) {
-       
         localStorage.setItem('token', response.data.accessToken);
         console.log('Token stored:', localStorage.getItem('token')); 
 
-        
         axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.accessToken}`;
 
+        const questionnaireCompleted = localStorage.getItem('questionnaireCompleted');
         
         navigate('/dashboard');
       } else {
