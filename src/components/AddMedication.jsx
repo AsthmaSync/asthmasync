@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { addMedication } from '../services/medications';
 import { useNavigate } from 'react-router-dom';
 import { showSuccessAlert, showErrorAlert } from '../utils/alerts';
+import LoadingSpinner from './LoadingSpinner';
 
 const AddMedication = () => {
     const navigate = useNavigate();
@@ -9,22 +10,18 @@ const AddMedication = () => {
         name: '',
         dosage: '',
         frequency: 'daily',
-        startDate: new Date().toISOString().split('T')[0],
+        startDate: '',
         endDate: '',
-        purpose: 'reliever',
-        taken: false,
-        dosageTaken: 0
+        purpose: 'reliever'
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
     const handleChange = (e) => {
-        const { name, value, type } = e.target;
+        const { name, value } = e.target;
         setFormData(prevState => ({
             ...prevState,
-            [name]: type === 'number' ? Number(value) : 
-                    name === 'taken' ? value === 'true' :
-                    value
+            [name]: value
         }));
     };
 
@@ -34,15 +31,14 @@ const AddMedication = () => {
         setError('');
 
         try {
+            // Format the payload to match backend expectations
             const payload = {
                 name: formData.name,
                 dosage: formData.dosage,
                 frequency: formData.frequency,
                 startDate: formData.startDate,
                 endDate: formData.endDate || undefined,
-                purpose: formData.purpose,
-                taken: formData.taken,
-                dosageTaken: Number(formData.dosageTaken)
+                purpose: formData.purpose
             };
 
             console.log('Sending medication data:', payload);
@@ -58,6 +54,10 @@ const AddMedication = () => {
             setLoading(false);
         }
     };
+
+    if (loading) {
+        return <LoadingSpinner text="Adding medication..." />;
+    }
 
     return (
         <div className="container mx-auto px-4 py-8 max-w-md">
@@ -163,39 +163,6 @@ const AddMedication = () => {
                         value={formData.endDate}
                         onChange={handleChange}
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                    />
-                </div>
-
-                <div>
-                    <label htmlFor="taken" className="block text-gray-700 font-medium mb-2">
-                        Medication Taken*
-                    </label>
-                    <select
-                        id="taken"
-                        name="taken"
-                        value={formData.taken}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                    >
-                        <option value={false}>No</option>
-                        <option value={true}>Yes</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label htmlFor="dosageTaken" className="block text-gray-700 font-medium mb-2">
-                        Dosages Taken*
-                    </label>
-                    <input
-                        type="text"
-                        id="dosageTaken"
-                        name="dosageTaken"
-                        value={formData.dosageTaken}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                        placeholder="Enter number of dosages taken"
                     />
                 </div>
 

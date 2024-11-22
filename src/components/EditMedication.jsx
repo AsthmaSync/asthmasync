@@ -2,17 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getOneMedication, updateMedication } from '../services/medications';
 import { showSuccessAlert, showErrorAlert } from '../utils/alerts';
+import LoadingSpinner from './LoadingSpinner';
 
 const EditMedication = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const [medication, setMedication] = useState(null);
     const [formData, setFormData] = useState({
         name: '',
         dosage: '',
-        frequency: '',
+        frequency: 'daily',
         startDate: '',
         endDate: '',
-        notes: ''
+        purpose: 'preventive',
+        taken: false,
+        dosageTaken: 0
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -21,15 +25,7 @@ const EditMedication = () => {
         const fetchMedication = async () => {
             try {
                 const response = await getOneMedication(id);
-                const medication = response.data;
-                setFormData({
-                    name: medication.name,
-                    dosage: medication.dosage,
-                    frequency: medication.frequency,
-                    startDate: new Date(medication.startDate).toISOString().split('T')[0],
-                    endDate: medication.endDate ? new Date(medication.endDate).toISOString().split('T')[0] : '',
-                    notes: medication.notes || ''
-                });
+                setMedication(response.data);
             } catch (err) {
                 console.error('Error fetching medication:', err);
                 showErrorAlert('Failed to load medication details');
@@ -42,7 +38,22 @@ const EditMedication = () => {
         fetchMedication();
     }, [id]);
 
-    const handleChange = (e) => {
+    useEffect(() => {
+        if (medication) {
+            setFormData({
+                name: medication.name || '',
+                dosage: medication.dosage || '',
+                frequency: medication.frequency || 'daily',
+                startDate: medication.startDate || '',
+                endDate: medication.endDate || '',
+                purpose: medication.purpose || 'preventive',
+                taken: medication.taken || false,
+                dosageTaken: medication.dosageTaken || 0
+            });
+        }
+    }, [medication]);
+
+    const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevState => ({
             ...prevState,
@@ -56,7 +67,18 @@ const EditMedication = () => {
         setError('');
 
         try {
-            await updateMedication(id, formData);
+            const payload = {
+                name: formData.name,
+                dosage: formData.dosage,
+                frequency: formData.frequency,
+                startDate: new Date(formData.startDate).toISOString(),
+                endDate: formData.endDate ? new Date(formData.endDate).toISOString() : undefined,
+                purpose: formData.purpose,
+                taken: Boolean(formData.taken),
+                dosageTaken: Number(formData.dosageTaken)
+            };
+
+            await updateMedication(id, payload);
             showSuccessAlert('Medication updated successfully!');
             navigate(`/medications/${id}`);
         } catch (err) {
@@ -70,9 +92,7 @@ const EditMedication = () => {
     };
 
     if (loading) {
-        return <div className="flex justify-center items-center min-h-screen">
-            <div className="text-cyan-500">Loading...</div>
-        </div>;
+        return <LoadingSpinner text="Loading Medication Details..." />;
     }
 
     return (
@@ -95,7 +115,7 @@ const EditMedication = () => {
                         id="name"
                         name="name"
                         value={formData.name}
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                         required
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
                     />
@@ -110,7 +130,7 @@ const EditMedication = () => {
                         id="dosage"
                         name="dosage"
                         value={formData.dosage}
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                         required
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
                     />
@@ -120,15 +140,35 @@ const EditMedication = () => {
                     <label htmlFor="frequency" className="block text-gray-700 font-medium mb-2">
                         Frequency*
                     </label>
-                    <input
-                        type="text"
+                    <select
                         id="frequency"
                         name="frequency"
                         value={formData.frequency}
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                         required
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                    />
+                    >
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label htmlFor="purpose" className="block text-gray-700 font-medium mb-2">
+                        Purpose*
+                    </label>
+                    <select
+                        id="purpose"
+                        name="purpose"
+                        value={formData.purpose}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    >
+                        <option value="reliever">Reliever</option>
+                        <option value="preventive">Preventive</option>
+                    </select>
                 </div>
 
                 <div>
@@ -140,7 +180,7 @@ const EditMedication = () => {
                         id="startDate"
                         name="startDate"
                         value={formData.startDate}
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                         required
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
                     />
@@ -155,21 +195,40 @@ const EditMedication = () => {
                         id="endDate"
                         name="endDate"
                         value={formData.endDate}
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
                     />
                 </div>
 
                 <div>
-                    <label htmlFor="notes" className="block text-gray-700 font-medium mb-2">
-                        Notes (Optional)
+                    <label htmlFor="taken" className="block text-gray-700 font-medium mb-2">
+                        Medication Taken*
                     </label>
-                    <textarea
-                        id="notes"
-                        name="notes"
-                        value={formData.notes}
-                        onChange={handleChange}
-                        rows="4"
+                    <select
+                        id="taken"
+                        name="taken"
+                        value={formData.taken}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    >
+                        <option value={false}>No</option>
+                        <option value={true}>Yes</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label htmlFor="dosageTaken" className="block text-gray-700 font-medium mb-2">
+                        Dosages Taken*
+                    </label>
+                    <input
+                        type="number"
+                        id="dosageTaken"
+                        name="dosageTaken"
+                        value={formData.dosageTaken}
+                        onChange={handleInputChange}
+                        required
+                        min="0"
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
                     />
                 </div>
@@ -197,4 +256,4 @@ const EditMedication = () => {
     );
 };
 
-export default EditMedication; 
+export default EditMedication;

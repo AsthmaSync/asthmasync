@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getOneMedication, deleteMedication } from '../services/medications';
 import { format } from 'date-fns';
+import LoadingSpinner from './LoadingSpinner';
 
 const MedicationDetails = () => {
     const { id } = useParams();
@@ -39,9 +40,7 @@ const MedicationDetails = () => {
     };
 
     if (loading) {
-        return <div className="flex justify-center items-center min-h-screen">
-            <div className="text-cyan-500">Loading...</div>
-        </div>;
+        return <LoadingSpinner text="Loading Medication Details..." />;
     }
 
     if (error) {
@@ -63,7 +62,7 @@ const MedicationDetails = () => {
                     <h2 className="text-2xl font-bold text-cyan-500">Medication Details</h2>
                     <div className="space-x-2">
                         <Link
-                            to={`/medications/${id}/edit`}
+                            to={`/editMedication/${id}`}
                             className="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600"
                         >
                             Edit

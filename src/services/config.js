@@ -2,12 +2,12 @@ import axios from "axios";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
-// Create axios instance
+
 export const apiClient = axios.create({
     baseURL: baseUrl,
 });
 
-// Add a request interceptor to dynamically add the token
+
 apiClient.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token');
@@ -22,7 +22,7 @@ apiClient.interceptors.request.use(
     }
 );
 
-// Optional: Add a response interceptor to handle token expiration
+
 apiClient.interceptors.response.use(
     (response) => response,
     (error) => {

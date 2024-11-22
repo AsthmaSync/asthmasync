@@ -12,7 +12,6 @@ import SymptomLog from './assets/layout/symptomlog'
 import MedicationTracker from './assets/layout/medicationTracker'
 import AsthmaTips from './components/AsthmaTipsAndResources'
 import LoggingHistory from './assets/layout/LoggingHistory'
-import Reminders from './assets/layout/Reminders'
 import Triggers from './components/Triggers'
 import GetSymptoms from './components/GetSymptoms'
 import GetMedications from './components/GetMedications'
@@ -21,19 +20,21 @@ import AddSymptom from './components/AddSymptom'
 import EditSymptom from './components/EditSymptom'
 import SymptomDetails from './components/SymptomDetails'
 import Overview from './components/Overview'
-import AddMedication from './components/AddMedication'
+import EditMedication from './components/EditMedication'
 import AddTrigger from './components/AddTrigger'
 import MedicationDetails from './components/MedicationDetails'
-import EditMedication from './components/EditMedication'
+import AddMedication from './components/AddMedication'
 import TriggerDetails from './components/TriggerDetails'
 import EditTrigger from './components/EditTrigger'
-
-
+import ProtectedRoute from './components/ProtectedRoute'
+import GetInhalers from './components/GetInhalers';
+import AddInhaler from './components/AddInhaler';
+import RecordPuffs from './components/RecordPuffs';
+import Features from './components/Features';
+import Contact from './components/Contact';
 
 function App() {
   const router = createBrowserRouter([
-
-    
     {
       path: "/",
       element: <LandingPage />
@@ -55,16 +56,17 @@ function App() {
 
     {
       path: "/questionnaire",
-      element: <Questionnaire/>
+      element: <Questionnaire />
     },
 
     {
       path: "/overview",
-      element: <Overview/>
+      element: <ProtectedRoute><Overview/></ProtectedRoute>
     },
+    
     {
       path: "/symptoms",
-      element: <GetSymptoms/>
+      element: <ProtectedRoute><GetSymptoms/></ProtectedRoute>
     },
 
     {
@@ -78,24 +80,9 @@ function App() {
 
     {
       path: "/dashboard",
-      element: <Dashboard/>
+      element: <ProtectedRoute><Dashboard/></ProtectedRoute>
     },
 
-    // {
-    //   path: "/symptomslog",
-    //   element: <SymptomsLog/>
-    // },
-
-  
-    // {
-    //   path: "/medicationTracking",
-    //   element: <MedicationTracking />
-    // },
-
-    {
-      path: "/Reminders",
-      element: <Reminders />
-    },
 
     {
       path: "/loggingHistory",
@@ -123,11 +110,6 @@ function App() {
     },
 
     {
-      path: "/medications/add",
-      element: <AddMedication />
-    },
-
-    {
       path: "/triggers/add",
       element: <AddTrigger />
     },
@@ -138,7 +120,12 @@ function App() {
     },
 
     {
-      path: "/medications/:id/edit",
+      path: "/addMedication",
+      element: <AddMedication />
+    },
+
+    {
+      path: "/editMedication/:id",
       element: <EditMedication />
     },
 
@@ -152,12 +139,39 @@ function App() {
       element: <EditTrigger />
     },
 
+    {
+      path: "/medications/add",
+      element: <AddMedication />
+    },
+
+    {
+      path: "/inhalers",
+      element: <GetInhalers />
+    },
+    {
+      path: "/addInhaler",
+      element: <AddInhaler />
+    },
+    {
+      path: "/inhalers/:id/record",
+      element: <RecordPuffs />
+    },
+
+    {
+      path: "/features",
+      element: <Features />
+    },
+
+    {
+      path: "/contact",
+      element: <Contact />
+    },
+
+    
 
     
 
   ])
-
-
 
   return (
     <RouterProvider router={router}/>

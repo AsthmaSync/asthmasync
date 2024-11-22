@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import image1 from '../assets/images/16920050_5818665.jpg';
 import { apiLogin } from '../services/auth';
-import { FiEye, FiEyeOff } from 'react-icons/fi'; // Import icons for password visibility toggle
+import { FiEye, FiEyeOff } from 'react-icons/fi'; 
 import axios from 'axios';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +13,7 @@ const SignIn = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [showPassword, setShowPassword] = useState(false); 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -21,7 +22,7 @@ const SignIn = () => {
   };
 
   const handlePasswordToggle = () => {
-    setShowPassword(!showPassword); // Toggle the password visibility state
+    setShowPassword(!showPassword); 
   };
 
   const handleSubmit = async (e) => {
@@ -30,17 +31,17 @@ const SignIn = () => {
     setError('');
     try {
       const response = await apiLogin(formData);
-      console.log('Login response:', response); // For debugging
+      console.log('Login response:', response); 
 
       if (response.data && response.data.accessToken) {
-        // Store the token
+       
         localStorage.setItem('token', response.data.accessToken);
-        console.log('Token stored:', localStorage.getItem('token')); // Verify token storage
+        console.log('Token stored:', localStorage.getItem('token')); 
 
-        // Update axios headers with the new token
+        
         axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.accessToken}`;
 
-        // Redirect to dashboard
+        
         navigate('/dashboard');
       } else {
         setError('Login failed: No token received');
@@ -52,6 +53,10 @@ const SignIn = () => {
       setLoading(false);
     }
   };
+
+  if (loading) {
+    return <LoadingSpinner text="Signing you in..." />;
+  }
 
   return (
     <div

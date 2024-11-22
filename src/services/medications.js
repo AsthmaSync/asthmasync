@@ -9,19 +9,7 @@ export const getOneMedication = async (id) => {
 };
 
 export const addMedication = async (payload) => {
-    const formattedPayload = {
-        name: payload.name,
-        dosage: payload.dosage,
-        frequency: payload.frequency,
-        startDate: payload.startDate,
-        endDate: payload.endDate || undefined,
-        purpose: payload.purpose,
-        taken: payload.taken,
-        dosageTaken: Number(payload.dosageTaken)
-    };
-
-    console.log('Sending to server:', formattedPayload);
-    return await apiClient.post('/medications', formattedPayload);
+    return await apiClient.post('/medications', payload);
 };
 
 export const updateMedication = async (id, payload) => {
