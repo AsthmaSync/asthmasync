@@ -73,6 +73,18 @@ function App() {
       path: "/medications",
       element: <GetMedications/>
     },
+    {
+      path: "/medications/add",
+      element: <AddMedication />
+    },
+    {
+      path: "/medications/:id",
+      element: <MedicationDetails />
+    },
+    {
+      path: "/medications/:id/edit",
+      element: <EditMedication />
+    },
     // {
     //   path: "/triggers",
     //   element: <GetTriggers/>

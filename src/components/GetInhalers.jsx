@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getInhalers, recordPuffsUsed, trackInhalerPuffs } from '../services/puff';
+import { getInhalers, recordPuffsUsed } from '../services/puff';
 import { Link } from 'react-router-dom';
 import { showSuccessAlert, showErrorAlert } from '../utils/alerts';
 import LoadingSpinner from './LoadingSpinner';
@@ -16,7 +16,12 @@ const GetInhalers = () => {
     const fetchInhalers = async () => {
         try {
             const response = await getInhalers();
-            setInhalers(response.data);
+            console.log('Fetched inhalers response:', response);
+            
+            const inhalersData = response.data.inhalers || response.data;
+            console.log('Inhalers data:', inhalersData);
+            
+            setInhalers(Array.isArray(inhalersData) ? inhalersData : []);
             setError(null);
         } catch (err) {
             console.error('Error fetching inhalers:', err);
@@ -31,19 +36,32 @@ const GetInhalers = () => {
     }, []);
 
     const handleRecordPuffs = async (inhalerId) => {
-        if (!puffsUsed) {
-            showErrorAlert('Please enter the number of puffs used');
+        if (!puffsUsed || puffsUsed <= 0) {
+            showErrorAlert('Please enter a valid number of puffs used');
             return;
         }
 
         try {
             const response = await recordPuffsUsed(inhalerId, Number(puffsUsed));
-            showSuccessAlert(`Successfully recorded ${puffsUsed} puffs. ${response.data.remainingPuffs} puffs remaining.`);
+            console.log('Record puffs response:', response);
+            
+            const remainingPuffs = response.data.inhaler.remainingPuffs;
+            const originalTotal = response.data.inhaler.oriTotal;
+            
+            showSuccessAlert(`Successfully recorded ${puffsUsed} puffs. ${remainingPuffs} puffs remaining out of ${originalTotal}.`);
             setPuffsUsed('');
             setSelectedInhaler(null);
-            fetchInhalers(); // Refresh the list
+            
+            setInhalers(prevInhalers => 
+                prevInhalers.map(inhaler => 
+                    inhaler._id === inhalerId 
+                        ? { ...inhaler, remainingPuffs } 
+                        : inhaler
+                )
+            );
         } catch (err) {
-            showErrorAlert('Failed to record puffs used. Please try again.');
+            console.error('Error recording puffs:', err);
+            showErrorAlert('Failed to record puffs. Please try again.');
         }
     };
 
@@ -54,29 +72,29 @@ const GetInhalers = () => {
     return (
         <div className="container mx-auto px-4 py-8">
             {/* Header Section */}
-            <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-                <div className="flex justify-between items-center">
+            <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-8">
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0">
                     <div className="flex items-center gap-3">
-                        <FaSprayCan className="text-3xl text-cyan-500" />
-                        <div>
-                            <h2 className="text-2xl font-bold text-gray-800">Inhalers Log</h2>
-                            <p className="text-gray-600">Track and manage your inhalers</p>
+                        <FaSprayCan className="text-2xl sm:text-3xl text-cyan-500" />
+                        <div className="text-center sm:text-left">
+                            <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Inhalers Log</h2>
+                            <p className="text-gray-600 text-sm sm:text-base">Track and manage your inhalers</p>
                         </div>
                     </div>
                     <Link 
                         to="/addInhaler" 
-                        className="bg-cyan-500 text-white px-6 py-2 rounded-lg hover:bg-cyan-600 transition-colors flex items-center gap-2"
+                        className="w-full sm:w-auto bg-cyan-500 text-white px-4 py-2 rounded-lg hover:bg-cyan-600 transition-colors text-center"
                     >
-                        <span>Add New Inhaler</span>
+                        Add New Inhaler
                     </Link>
                 </div>
             </div>
 
             {/* Inhalers Grid */}
             {inhalers.length === 0 ? (
-                <div className="bg-white rounded-lg shadow-lg p-8 text-center">
-                    <FaSprayCan className="text-5xl text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-500 text-lg">No inhalers recorded yet.</p>
+                <div className="bg-white rounded-lg shadow-lg p-6 text-center">
+                    <FaSprayCan className="text-4xl sm:text-5xl text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-500 text-base sm:text-lg">No inhalers recorded yet.</p>
                     <Link 
                         to="/addInhaler"
                         className="text-cyan-500 hover:text-cyan-600 mt-2 inline-block"
@@ -85,7 +103,7 @@ const GetInhalers = () => {
                     </Link>
                 </div>
             ) : (
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                     {inhalers.map((inhaler) => (
                         <div 
                             key={inhaler._id} 
@@ -96,17 +114,31 @@ const GetInhalers = () => {
                                     {inhaler.inhalerName}
                                 </h3>
                                 <div className="space-y-2 text-gray-600">
-                                    <p>Original Total: {inhaler.oriTotal} puffs</p>
-                                    <p>Remaining: {inhaler.remainingPuffs || inhaler.oriTotal} puffs</p>
+                                    <p>Total Puffs: {inhaler.oriTotal}</p>
+                                    <p className="font-medium">
+                                        Remaining: {inhaler.remainingPuffs || inhaler.oriTotal} puffs
+                                    </p>
+                                    <p>Used: {inhaler.oriTotal - (inhaler.remainingPuffs || inhaler.oriTotal)} puffs</p>
                                     
                                     {/* Progress Bar */}
-                                    <div className="w-full bg-gray-200 rounded-full h-2.5">
-                                        <div 
-                                            className="bg-cyan-500 h-2.5 rounded-full"
-                                            style={{ 
-                                                width: `${((inhaler.remainingPuffs || inhaler.oriTotal) / inhaler.oriTotal) * 100}%` 
-                                            }}
-                                        ></div>
+                                    <div className="relative pt-1">
+                                        <div className="flex mb-2 items-center justify-between">
+                                            <div>
+                                                <span className="text-xs font-semibold inline-block text-cyan-600">
+                                                    {Math.round(((inhaler.remainingPuffs || inhaler.oriTotal) / inhaler.oriTotal) * 100)}% remaining
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
+                                            <div 
+                                                style={{ width: `${((inhaler.remainingPuffs || inhaler.oriTotal) / inhaler.oriTotal) * 100}%` }}
+                                                className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center transition-all duration-300 ${
+                                                    ((inhaler.remainingPuffs || inhaler.oriTotal) / inhaler.oriTotal) <= 0.2 
+                                                    ? 'bg-red-500' 
+                                                    : 'bg-cyan-500'
+                                                }`}
+                                            ></div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -118,7 +150,7 @@ const GetInhalers = () => {
                                             value={puffsUsed}
                                             onChange={(e) => setPuffsUsed(e.target.value)}
                                             placeholder="Enter puffs used"
-                                            className="w-full px-3 py-2 border rounded-lg"
+                                            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
                                         />
                                         <div className="flex gap-2">
                                             <button
@@ -153,13 +185,14 @@ const GetInhalers = () => {
             )}
 
             {/* Back to Dashboard Button */}
-            <div className="fixed bottom-8 right-8">
+            <div className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8">
                 <Link 
                     to="/dashboard" 
-                    className="flex items-center gap-2 px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors shadow-lg"
+                    className="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors shadow-lg text-sm sm:text-base"
                 >
                     <FiArrowLeft className="text-lg" />
-                    Back to Dashboard
+                    <span className="hidden sm:inline">Back to Dashboard</span>
+                    <span className="sm:hidden">Back</span>
                 </Link>
             </div>
         </div>

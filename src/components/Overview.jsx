@@ -3,7 +3,7 @@ import { apiData } from '../services/auth';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 import LoadingSpinner from './LoadingSpinner';
-import { FaThermometerHalf, FaPills, FaExclamationTriangle, FaSprayCan } from 'react-icons/fa';
+import { FaThermometerHalf, FaPills, FaExclamationTriangle, FaSprayCan, FaChartLine, FaBell } from 'react-icons/fa';
 import { FiArrowLeft } from 'react-icons/fi';
 
 const Overview = () => {
@@ -132,10 +132,21 @@ const Overview = () => {
                             {userData.medications.slice(0, 3).map((medication) => (
                                 <div key={medication._id} className="bg-gray-50 rounded-lg p-4 hover:shadow-md transition-shadow">
                                     <h3 className="font-semibold text-cyan-500">{medication.name}</h3>
-                                    <p className="text-gray-600 text-sm">Dosage: {medication.dosage}</p>
-                                    <p className="text-gray-600 text-sm">Frequency: {medication.frequency}</p>
+                                    <div className="space-y-1 mt-2">
+                                        <p className="text-gray-600 text-sm">Dosage: {medication.dosage}</p>
+                                        <p className="text-gray-600 text-sm">Frequency: {medication.frequency}</p>
+                                        <p className="text-gray-600 text-sm">Purpose: {medication.purpose}</p>
+                                        <p className="text-gray-600 text-sm">
+                                            Status: {medication.taken ? 'Taken' : 'Not Taken'}
+                                        </p>
+                                        {medication.taken && (
+                                            <p className="text-gray-600 text-sm">
+                                                Doses Taken: {medication.dosageTaken}
+                                            </p>
+                                        )}
+                                    </div>
                                     <p className="text-gray-500 text-sm mt-2">
-                                        Start Date: {format(new Date(medication.startDate), 'PPP')}
+                                        Started: {format(new Date(medication.startDate), 'PPP')}
                                     </p>
                                 </div>
                             ))}

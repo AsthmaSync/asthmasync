@@ -5,6 +5,7 @@ import { apiSignup } from '../services/auth';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { showSuccessAlert, showErrorAlert } from '../utils/alerts';
 import LoadingSpinner from '../components/LoadingSpinner';
+import Swal from 'sweetalert2';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -39,10 +40,17 @@ const SignUp = () => {
       console.log('Signup response:', response);
       
       if (response.data && response.data.token) {
-        localStorage.setItem('token', response.data.token);
-        localStorage.removeItem('questionnaireCompleted');
-        showSuccessAlert('Account created successfully! Please complete your profile.');
-        navigate('/questionnaire');
+        await Swal.fire({
+          title: 'Success!',
+          text: 'Your account has been created. Please sign in to continue.',
+          icon: 'success',
+          confirmButtonText: 'Sign In',
+          confirmButtonColor: '#06b6d4',
+          allowOutsideClick: false,
+          allowEscapeKey: false
+        });
+        
+        window.location.href = '/login';
       }
     } catch (err) {
       console.error('Signup error:', err);
@@ -83,7 +91,7 @@ const SignUp = () => {
         </p>
 
         {error && (
-          <div className="text-gray-500 text-center mb-4">
+          <div className="text-red-500 text-center mb-4">
             {error}
           </div>
         )}

@@ -35,15 +35,15 @@ const SignIn = () => {
 
       if (response.data && response.data.accessToken) {
         localStorage.setItem('token', response.data.accessToken);
-        console.log('Token stored:', localStorage.getItem('token')); 
-
-        axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.accessToken}`;
-
-        const questionnaireCompleted = localStorage.getItem('questionnaireCompleted');
+        localStorage.setItem('userEmail', formData.email);
         
-        navigate('/dashboard');
-      } else {
-        setError('Login failed: No token received');
+        const userProfile = localStorage.getItem(`profile_${formData.email}`);
+        
+        if (!userProfile) {
+          navigate('/questionnaire');
+        } else {
+          navigate('/dashboard');
+        }
       }
     } catch (error) {
       console.error('Login error:', error);

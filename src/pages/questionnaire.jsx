@@ -43,14 +43,19 @@ const Questionnaire = () => {
         setLoading(true);
 
         try {
-            // Store the questionnaire data in localStorage
-            localStorage.setItem('userProfile', JSON.stringify(formData));
-            // Set a flag to indicate questionnaire completion
-            localStorage.setItem('questionnaireCompleted', 'true');
+            const userEmail = localStorage.getItem('userEmail');
+            console.log('Saving for email:', userEmail); // Debug log
+            console.log('Form data being saved:', formData); // Debug log
             
-            showSuccessAlert('Profile completed successfully! Redirecting to dashboard...');
+            if (userEmail) {
+                // Store the questionnaire data
+                localStorage.setItem(`profile_${userEmail}`, JSON.stringify(formData));
+                localStorage.setItem('questionnaireCompleted', 'true');
+                console.log('Profile saved:', localStorage.getItem(`profile_${userEmail}`)); // Debug log
+            }
             
-            // Direct navigation to dashboard
+            showSuccessAlert('Profile completed successfully!');
+            // Navigate directly to dashboard instead of login
             navigate('/dashboard', { replace: true });
             
         } catch (error) {

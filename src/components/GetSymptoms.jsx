@@ -58,30 +58,30 @@ const GetSymptoms = () => {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            {/* Header Section */}
-            <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-                <div className="flex justify-between items-center">
+            {/* Header Section - Made responsive */}
+            <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-8">
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0">
                     <div className="flex items-center gap-3">
-                        <FaThermometerHalf className="text-3xl text-cyan-500" />
-                        <div>
-                            <h2 className="text-2xl font-bold text-gray-800">Symptoms Log</h2>
-                            <p className="text-gray-600">Track and manage your asthma symptoms</p>
+                        <FaThermometerHalf className="text-2xl sm:text-3xl text-cyan-500" />
+                        <div className="text-center sm:text-left">
+                            <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Symptoms Log</h2>
+                            <p className="text-gray-600 text-sm sm:text-base">Track and manage your asthma symptoms</p>
                         </div>
                     </div>
                     <Link 
                         to="/symptoms/add" 
-                        className="bg-cyan-500 text-white px-6 py-2 rounded-lg hover:bg-cyan-600 transition-colors flex items-center gap-2"
+                        className="w-full sm:w-auto bg-cyan-500 text-white px-4 py-2 rounded-lg hover:bg-cyan-600 transition-colors text-center"
                     >
-                        <span>Add New Symptom</span>
+                        Add New Symptom
                     </Link>
                 </div>
             </div>
             
-            {/* Symptoms Grid */}
+            {/* Symptoms Grid - Made responsive */}
             {symptoms.length === 0 ? (
-                <div className="bg-white rounded-lg shadow-lg p-8 text-center">
-                    <FaThermometerHalf className="text-5xl text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-500 text-lg">No symptoms recorded yet.</p>
+                <div className="bg-white rounded-lg shadow-lg p-6 text-center">
+                    <FaThermometerHalf className="text-4xl sm:text-5xl text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-500 text-base sm:text-lg">No symptoms recorded yet.</p>
                     <Link 
                         to="/symptoms/add"
                         className="text-cyan-500 hover:text-cyan-600 mt-2 inline-block"
@@ -90,7 +90,7 @@ const GetSymptoms = () => {
                     </Link>
                 </div>
             ) : (
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                     {symptoms.map((symptom) => (
                         <div 
                             key={symptom.id} 
@@ -136,14 +136,15 @@ const GetSymptoms = () => {
                 </div>
             )}
             
-            {/* Back to Dashboard Button */}
-            <div className="fixed bottom-8 right-8">
+            {/* Back to Dashboard Button - Made responsive */}
+            <div className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8">
                 <Link 
                     to="/dashboard" 
-                    className="flex items-center gap-2 px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors shadow-lg"
+                    className="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors shadow-lg text-sm sm:text-base"
                 >
                     <FiArrowLeft className="text-lg" />
-                    Back to Dashboard
+                    <span className="hidden sm:inline">Back to Dashboard</span>
+                    <span className="sm:hidden">Back</span>
                 </Link>
             </div>
         </div>

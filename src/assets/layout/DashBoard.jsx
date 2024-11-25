@@ -13,9 +13,18 @@ const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
+  // Get user profile data
+  const userEmail = localStorage.getItem('userEmail');
+  const userProfile = userEmail ? JSON.parse(localStorage.getItem(`profile_${userEmail}`)) : null;
+
   const handleLogout = () => {
+    // Clear all necessary storage items
     localStorage.removeItem('token');
-    navigate('/login');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('isNewUser');
+    
+    // Navigate to landing page
+    navigate('/', { replace: true });
   };
 
   useEffect(() => {
@@ -35,8 +44,6 @@ const Dashboard = () => {
 
     fetchUserData();
   }, []);
-
-  const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
 
   if (loading) {
     return <LoadingSpinner text="Loading Dashboard..." />;
@@ -125,7 +132,7 @@ const Dashboard = () => {
                 className="block py-2 px-4 rounded-md bg-cyan-500 text-white text-center hover:bg-cyan-600 transition-colors"
                 onClick={() => setIsSidebarOpen(false)}
               >
-                Get Inhalers
+              Log Inhalers
               </Link>
             </nav>
           </div>
@@ -133,7 +140,7 @@ const Dashboard = () => {
           {/* Logout Button */}
           <button 
             onClick={handleLogout}
-            className="m-6 flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-cyan-500 text-white hover:bg-cyan-600 transition-colors"
+            className="m-6 flex items-center justify-center gap-2 px-2 py-2 rounded-md bg-cyan-500 text-white hover:bg-cyan-600 transition-colors"
           >
             <FiLogOut className="text-lg" />
             Logout

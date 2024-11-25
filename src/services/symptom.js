@@ -13,7 +13,7 @@ export const addSymptom = async (payload) => {
 };
 
 export const updateSymptom = async (id, payload) => {
-    return await apiClient.put(`/symptoms/${id}`, payload);
+    return await apiClient.patch(`/symptoms/${id}`, payload);
 };
 
 export const deleteSymptom = async (id) => {

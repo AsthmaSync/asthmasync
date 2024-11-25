@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getOneMedication, deleteMedication } from '../services/medications';
 import { format } from 'date-fns';
 import LoadingSpinner from './LoadingSpinner';
+import { showSuccessAlert, showErrorAlert, showDeleteConfirmation } from '../utils/alerts';
 
 const MedicationDetails = () => {
     const { id } = useParams();
@@ -28,14 +29,16 @@ const MedicationDetails = () => {
     }, [id]);
 
     const handleDelete = async () => {
-        if (window.confirm('Are you sure you want to delete this medication?')) {
-            try {
+        try {
+            const result = await showDeleteConfirmation();
+            if (result.isConfirmed) {
                 await deleteMedication(id);
+                showSuccessAlert('Medication deleted successfully!');
                 navigate('/medications');
-            } catch (err) {
-                console.error('Error deleting medication:', err);
-                setError('Failed to delete medication');
             }
+        } catch (err) {
+            console.error('Error deleting medication:', err);
+            showErrorAlert('Failed to delete medication. Please try again.');
         }
     };
 
